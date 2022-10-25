@@ -7,21 +7,20 @@ app.get("/", (req, res) => {
 });
 
 app.get("/video", (req, res) => {
-  const range = req.headers.Range
-  console.log(range);
+  const range = req.headers.range
 
   if(!range){
       res.status(400).send("range is not founded!")
   }
-
+  
+  const videoPath = "./movies/Eternals.2021 @english_movies_with_subtitle.mkv"
   const videoSize = fs.statSync(
-    "Eternals.2021 @english_movies_with_subtitle.mkv"
+    videoPath
   ).size;
+
   const CHUNK_SIZE = 10 ** 6;
   const start = Number(range.replace(/\D/g, ""));
   const end = Math.min(start + CHUNK_SIZE, videoSize - 1);
-
-  console.log(CHUNK_SIZE, videoSize, start, end);
 
   // Create headers
   const contentLength = end - start + 1;
